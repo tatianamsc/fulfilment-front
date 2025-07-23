@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Панель фулфилмента</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    header {
+      background: #333;
+      color: #fff;
+      padding: 1rem;
+      width: 100%;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+    main {
+      margin-top: 20px;
+      width: 90%;
+      max-width: 600px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-top: 10px;
+    }
+    input, select, button {
+      margin-top: 5px;
+      padding: 8px;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 20px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .chart-placeholder {
+      margin-top: 30px;
+      height: 200px;
+      background: #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>📦 Панель фулфилмента</header>
+  <main>
+    <h2>Оформить заказ</h2>
+    <form>
+      <label for="product">Товар:</label>
+      <input type="text" id="product" placeholder="Введите название товара" required />
+      <label for="quantity">Количество:</label>
+      <input type="number" id="quantity" placeholder="Введите количество" required />
+      <label for="warehouse">Склад:</label>
+      <select id="warehouse">
+        <option value="wb">Wildberries</option>
+        <option value="ozon">Ozon</option>
+      </select>
+      <button type="submit">✅ Отправить заказ</button>
+    </form>
+
+    <div class="chart-placeholder">📊 Здесь будет график отгрузок</div>
+  </main>
+</body>
+</html>
