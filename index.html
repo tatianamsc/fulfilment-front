@@ -1,137 +1,109 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Мини-приложение FFMSC</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-      color: #333;
-      text-align: center;
-    }
-    header {
-      background: #6c63ff;
-      color: #fff;
-      padding: 1rem;
-      font-size: 1.5rem;
-    }
-    .menu {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      padding: 1rem;
-    }
-    button {
-      padding: 1rem;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 8px;
-      background: #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #eee;
-    }
-    .section {
-      display: none;
-      padding: 1rem;
-    }
-    .active {
-      display: block;
-    }
-    input[type=number] {
-      padding: 0.5rem;
-      font-size: 1rem;
-      margin: 0.5rem;
-    }
-    .result {
-      margin-top: 1rem;
-      font-weight: bold;
-      color: #6c63ff;
-    }
-    .back-btn {
-      margin-top: 1rem;
-      background: #6c63ff;
-      color: #fff;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FFMSC Мини‑приложение</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #333; text-align: center; }
+  header { background: #6c63ff; color: #fff; padding: 1rem; font-size: 1.5rem; }
+  nav { margin: 1rem; }
+  button { padding: 0.8rem 1rem; font-size: 1rem; margin: 0.5rem; border: none; border-radius: 8px; background: #6c63ff; color: #fff; cursor: pointer; }
+  button:hover { background: #584fd6; }
+  section { display: none; padding: 1rem; }
+  section.active { display: block; }
+  table { margin: 1rem auto; border-collapse: collapse; width: 95%; max-width: 1100px; }
+  th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: center; font-size: 0.9rem; }
+  th { background: #eee; }
+  input[type=number] { width: 60px; padding: 0.3rem; font-size: 1rem; }
+  .result { font-size: 1.3rem; margin: 1rem; font-weight: bold; color: #6c63ff; }
+</style>
 </head>
 <body>
-  <header>FFMSC Мини‑приложение</header>
-  <div class="menu" id="mainMenu">
-    <button onclick="openSection('calc')">📦 Рассчитать стоимость</button>
-    <button onclick="openSection('tariffs')">💰 Тарифы</button>
-    <button onclick="openSection('address')">📍 Адрес</button>
-    <button onclick="openSection('contacts')">☎️ Контакты</button>
-  </div>
 
-  <div id="calc" class="section">
-    <h2>📦 Рассчитать стоимость</h2>
-    <p>Введите цену за единицу (₽):</p>
-    <input type="number" id="unitPrice" />
-    <p>Введите количество:</p>
-    <input type="number" id="quantity" />
-    <div>
-      <button onclick="calculate()">Рассчитать</button>
-    </div>
-    <div class="result" id="result"></div>
-    <button class="back-btn" onclick="goBack()">🔙 В меню</button>
-  </div>
+<header>FFMSC Мини‑приложение</header>
 
-  <div id="tariffs" class="section">
-    <h2>💰 Тарифы</h2>
-    <ul style="text-align:left; display:inline-block;">
-      <li>Услуги грузчика — 200 ₽</li>
-      <li>Приёмка товара — 2 ₽</li>
-      <li>Упаковка — 2 ₽</li>
-      <li>Зип‑пакет (15×21) — 9 ₽</li>
-      <li>Зип‑пакет (17×25) — 10 ₽</li>
-      <li>Доставка Коледино — 400 ₽</li>
-      <li>Доставка Тула — 550 ₽</li>
-      <li>Доставка Казань — 700 ₽</li>
-    </ul>
-    <button class="back-btn" onclick="goBack()">🔙 В меню</button>
-  </div>
+<nav>
+  <button onclick="showSection('calc')">📦 Рассчитать стоимость</button>
+  <button onclick="showSection('address')">📍 Адрес</button>
+  <button onclick="showSection('contacts')">☎️ Контакты</button>
+</nav>
 
-  <div id="address" class="section">
-    <h2>📍 Адрес</h2>
-    <p>г. Москва, ул. Примерная, д. 10</p>
-    <button class="back-btn" onclick="goBack()">🔙 В меню</button>
-  </div>
+<section id="calc" class="active">
+  <h2>📦 Рассчитать стоимость</h2>
+  <table>
+    <thead>
+      <tr><th>Услуга</th><th>Цена (₽)</th><th>Кол-во</th><th>Сумма (₽)</th></tr>
+    </thead>
+    <tbody id="serviceTable">
+      <tr><td>Приёмка товара</td><td class="price">2</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Сортировка товара по артикулам</td><td class="price">2</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Сортировка товара по размерам</td><td class="price">2</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Убрать фабричную упаковку</td><td class="price">1</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Убрать фабричную бирку</td><td class="price">1</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Визуальная проверка на брак</td><td class="price">10</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Тщательная проверка на брак</td><td class="price">15</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Тщательная проверка на брак (ДВОЙКА)</td><td class="price">25</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Прикрепление бирок</td><td class="price">8</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Вложение предмета</td><td class="price">2</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Упаковка</td><td class="price">2</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (15×21)</td><td class="price">9</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (17×25)</td><td class="price">10</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (20×30)</td><td class="price">12</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (25×35)</td><td class="price">13</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (30×30)</td><td class="price">14</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (30×40)</td><td class="price">15</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (35×45)</td><td class="price">16</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (40×50)</td><td class="price">19</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (40×60)</td><td class="price">20</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (50×70)</td><td class="price">23</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Зип-пакет матовый (60×80)</td><td class="price">30</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Маркировка на товар</td><td class="price">5</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Маркировка на упаковку</td><td class="price">5</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Честный знак на товар</td><td class="price">5</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Честный знак на упаковку</td><td class="price">5</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Комплектация в короба</td><td class="price">2</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Короб (60×40×40)</td><td class="price">120</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Маркировка короба (60×40×40)</td><td class="price">5</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Доставка WILDBERRIES (КОЛЕДИНО, ПОДОЛЬСК)</td><td class="price">400</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Доставка WILDBERRIES (ЭЛЕКТРОСТАЛЬ)</td><td class="price">450</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Доставка WILDBERRIES (ТУЛА)</td><td class="price">550</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Доставка WILDBERRIES (КАЗАНЬ)</td><td class="price">700</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Доставка WILDBERRIES (НЕВИННОМЫССК)</td><td class="price">700</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+      <tr><td>Доставка WILDBERRIES (КРАСНОДАР)</td><td class="price">700</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td></tr>
+    </tbody>
+  </table>
+  <div class="result">💰 Итог: <span id="grandTotal">0</span> ₽</div>
+</section>
 
-  <div id="contacts" class="section">
-    <h2>☎️ Контакты</h2>
-    <p>Телефон: +7 (999) 123‑45‑67</p>
-    <p>Email: info@example.com</p>
-    <button class="back-btn" onclick="goBack()">🔙 В меню</button>
-  </div>
+<section id="address">
+  <h2>📍 Адрес</h2>
+  <p>г. Москва, Чагинская 4 стр 13</p>
+</section>
 
-  <script>
-    function openSection(id) {
-      document.getElementById('mainMenu').style.display = 'none';
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
-    function goBack() {
-      document.getElementById('mainMenu').style.display = 'grid';
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    }
-    function calculate() {
-      const price = parseFloat(document.getElementById('unitPrice').value);
-      const qty = parseInt(document.getElementById('quantity').value);
-      if (isNaN(price) || isNaN(qty)) {
-        document.getElementById('result').innerText = '❌ Введите корректные данные';
-      } else {
-        const total = price * qty;
-        document.getElementById('result').innerText = `💰 Итоговая стоимость: ${total.toFixed(2)} ₽`;
-      }
-    }
-  </script>
+<section id="contacts">
+  <h2>☎️ Контакты</h2>
+  <p>Telegram: <a href="https://t.me/optania">@optania</a></p>
+</section>
+
+<script>
+function updateTotal() {
+  let rows = document.querySelectorAll('#serviceTable tr');
+  let grandTotal = 0;
+  rows.forEach(row => {
+    let price = parseFloat(row.querySelector('.price').innerText);
+    let qty = parseInt(row.querySelector('input').value) || 0;
+    let lineTotal = price * qty;
+    row.querySelector('.lineTotal').innerText = lineTotal.toFixed(2);
+    grandTotal += lineTotal;
+  });
+  document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+}
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+</script>
+
 </body>
 </html>
