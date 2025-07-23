@@ -3,93 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Панель фулфилмента</title>
+  <title>Мини-приложение FFMSC</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
+      background: #f9f9f9;
+      color: #333;
+      text-align: center;
     }
     header {
-      background: #333;
+      background: #6c63ff;
       color: #fff;
       padding: 1rem;
-      width: 100%;
-      text-align: center;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
     }
-    main {
-      margin-top: 20px;
-      width: 90%;
-      max-width: 600px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      margin-top: 0;
-      color: #333;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      margin-top: 10px;
-    }
-    input, select, button {
-      margin-top: 5px;
-      padding: 8px;
-      font-size: 1rem;
+    .menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      padding: 1rem;
     }
     button {
-      margin-top: 20px;
-      background: #007bff;
-      color: #fff;
+      padding: 1rem;
+      font-size: 1.1rem;
       border: none;
-      border-radius: 4px;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       cursor: pointer;
+      transition: background 0.3s;
     }
     button:hover {
-      background: #0056b3;
+      background: #eee;
     }
-    .chart-placeholder {
-      margin-top: 30px;
-      height: 200px;
-      background: #e9ecef;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      color: #666;
-      font-size: 0.9rem;
+    .section {
+      display: none;
+      padding: 1rem;
+    }
+    .active {
+      display: block;
+    }
+    input[type=number] {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin: 0.5rem;
+    }
+    .result {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #6c63ff;
+    }
+    .back-btn {
+      margin-top: 1rem;
+      background: #6c63ff;
+      color: #fff;
     }
   </style>
 </head>
 <body>
-  <header>📦 Панель фулфилмента</header>
-  <main>
-    <h2>Оформить заказ</h2>
-    <form>
-      <label for="product">Товар:</label>
-      <input type="text" id="product" placeholder="Введите название товара" required />
-      <label for="quantity">Количество:</label>
-      <input type="number" id="quantity" placeholder="Введите количество" required />
-      <label for="warehouse">Склад:</label>
-      <select id="warehouse">
-        <option value="wb">Wildberries</option>
-        <option value="ozon">Ozon</option>
-      </select>
-      <button type="submit">✅ Отправить заказ</button>
-    </form>
+  <header>FFMSC Мини‑приложение</header>
+  <div class="menu" id="mainMenu">
+    <button onclick="openSection('calc')">📦 Рассчитать стоимость</button>
+    <button onclick="openSection('tariffs')">💰 Тарифы</button>
+    <button onclick="openSection('address')">📍 Адрес</button>
+    <button onclick="openSection('contacts')">☎️ Контакты</button>
+  </div>
 
-    <div class="chart-placeholder">📊 Здесь будет график отгрузок</div>
-  </main>
+  <div id="calc" class="section">
+    <h2>📦 Рассчитать стоимость</h2>
+    <p>Введите цену за единицу (₽):</p>
+    <input type="number" id="unitPrice" />
+    <p>Введите количество:</p>
+    <input type="number" id="quantity" />
+    <div>
+      <button onclick="calculate()">Рассчитать</button>
+    </div>
+    <div class="result" id="result"></div>
+    <button class="back-btn" onclick="goBack()">🔙 В меню</button>
+  </div>
+
+  <div id="tariffs" class="section">
+    <h2>💰 Тарифы</h2>
+    <ul style="text-align:left; display:inline-block;">
+      <li>Услуги грузчика — 200 ₽</li>
+      <li>Приёмка товара — 2 ₽</li>
+      <li>Упаковка — 2 ₽</li>
+      <li>Зип‑пакет (15×21) — 9 ₽</li>
+      <li>Зип‑пакет (17×25) — 10 ₽</li>
+      <li>Доставка Коледино — 400 ₽</li>
+      <li>Доставка Тула — 550 ₽</li>
+      <li>Доставка Казань — 700 ₽</li>
+    </ul>
+    <button class="back-btn" onclick="goBack()">🔙 В меню</button>
+  </div>
+
+  <div id="address" class="section">
+    <h2>📍 Адрес</h2>
+    <p>г. Москва, ул. Примерная, д. 10</p>
+    <button class="back-btn" onclick="goBack()">🔙 В меню</button>
+  </div>
+
+  <div id="contacts" class="section">
+    <h2>☎️ Контакты</h2>
+    <p>Телефон: +7 (999) 123‑45‑67</p>
+    <p>Email: info@example.com</p>
+    <button class="back-btn" onclick="goBack()">🔙 В меню</button>
+  </div>
+
+  <script>
+    function openSection(id) {
+      document.getElementById('mainMenu').style.display = 'none';
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+    function goBack() {
+      document.getElementById('mainMenu').style.display = 'grid';
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    }
+    function calculate() {
+      const price = parseFloat(document.getElementById('unitPrice').value);
+      const qty = parseInt(document.getElementById('quantity').value);
+      if (isNaN(price) || isNaN(qty)) {
+        document.getElementById('result').innerText = '❌ Введите корректные данные';
+      } else {
+        const total = price * qty;
+        document.getElementById('result').innerText = `💰 Итоговая стоимость: ${total.toFixed(2)} ₽`;
+      }
+    }
+  </script>
 </body>
 </html>
