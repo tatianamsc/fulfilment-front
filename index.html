@@ -104,7 +104,6 @@
 function updateTotal() {
   let rows = document.querySelectorAll('#serviceTable tr');
   let grandTotal = 0;
-  let totalQty = 0;
   let receptionQty = 0;
 
   rows.forEach((row, index) => {
@@ -112,20 +111,17 @@ function updateTotal() {
     const qty = parseInt(row.querySelector('input').value) || 0;
     const lineTotal = price * qty;
     row.querySelector('.lineTotal').innerText = lineTotal.toFixed(2);
-    const perUnit = qty > 0 ? (lineTotal / qty) : 0;
-    row.querySelector('.perUnit').innerText = perUnit.toFixed(2);
+    row.querySelector('.perUnit').innerText = (qty > 0 ? (lineTotal / qty) : 0).toFixed(2);
     grandTotal += lineTotal;
-    totalQty += qty;
     if (index === 0) receptionQty = qty;
   });
 
-  document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
   const discount = parseFloat(document.getElementById('discount').value) || 0;
   const discounted = grandTotal * (1 - discount / 100);
-  document.getElementById('grandTotalWithDiscount').innerText = discounted.toFixed(2);
 
-  const perItemWithDiscount = receptionQty > 0 ? (discounted / receptionQty) : 0;
-  document.getElementById('perItem').innerText = perItemWithDiscount.toFixed(2);
+  document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+  document.getElementById('grandTotalWithDiscount').innerText = discounted.toFixed(2);
+  document.getElementById('perItem').innerText = (receptionQty > 0 ? (discounted / receptionQty) : 0).toFixed(2);
 }
 
 function resetCalc() {
@@ -138,22 +134,23 @@ function showSection(id) {
   document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   if (id === 'calc') updateTotal();
+  // изменение хэша
+  window.location.hash = id;
 }
 
-// Автоматический выбор секции при загрузке
+// при загрузке страницы
 window.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash.replace('#', '') || 'calc';
   showSection(hash);
 });
 
-// Реагируем на смену хэша
+// реагируем на смену хэша
 window.addEventListener('hashchange', () => {
   const hash = window.location.hash.replace('#', '');
   if (hash) {
     showSection(hash);
   }
 });
-
 </script>
 
 </body>
