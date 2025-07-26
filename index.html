@@ -104,6 +104,8 @@
 function updateTotal() {
   let rows = document.querySelectorAll('#serviceTable tr');
   let grandTotal = 0;
+  let totalQty = 0;
+
   rows.forEach(row => {
     let price = parseFloat(row.querySelector('.price').innerText);
     let qty = parseInt(row.querySelector('input').value) || 0;
@@ -112,16 +114,19 @@ function updateTotal() {
     let perUnit = qty > 0 ? (lineTotal / qty) : 0;
     row.querySelector('.perUnit').innerText = perUnit.toFixed(2);
     grandTotal += lineTotal;
+    totalQty += qty;
   });
+
   document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+
   let discount = parseFloat(document.getElementById('discount').value) || 0;
   let discounted = grandTotal * (1 - discount / 100);
   document.getElementById('grandTotalWithDiscount').innerText = discounted.toFixed(2);
-}
+
+  // 🔥 вычисляем стоимость за 1 единицу со скидкой
   let perItemWithDiscount = totalQty > 0 ? (discounted / totalQty) : 0;
   document.getElementById('perItem').innerText = perItemWithDiscount.toFixed(2);
 }
-</script>
 
 function resetCalc() {
   document.querySelectorAll('#serviceTable input').forEach(input => input.value = 0);
@@ -142,6 +147,3 @@ window.addEventListener('DOMContentLoaded', () => {
   showSection(sectionId);
 });
 </script>
-
-</body>
-</html>
