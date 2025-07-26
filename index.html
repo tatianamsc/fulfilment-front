@@ -90,8 +90,9 @@ function updateTotal() {
   let totalQty = 0;
 
   rows.forEach(row => {
-    let price = parseFloat(row.querySelector('.price').innerText);
-    let qty = parseInt(row.querySelector('input').value) || 0;
-    let lineTotal = price * qty;
-    row.querySelector('.lineTotal').innerText = lineTotal.toFixed(2);
-    let perUnit = qty > 0 ? (lineTotal / qty) : 0
+    const priceCell = row.querySelector('.price');
+    const input = row.querySelector('input');
+    const lineTotalCell = row.querySelector('.lineTotal');
+    const perUnitCell = row.querySelector('.perUnit');
+
+    if (!price
