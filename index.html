@@ -140,11 +140,20 @@ function showSection(id) {
   if (id === 'calc') updateTotal();
 }
 
+// Автоматический выбор секции при загрузке
 window.addEventListener('DOMContentLoaded', () => {
-  const params = new URLSearchParams(window.location.search);
-  const page = params.get('page') || 'calc';
-  showSection(page);
+  const hash = window.location.hash.replace('#', '') || 'calc';
+  showSection(hash);
 });
+
+// Реагируем на смену хэша
+window.addEventListener('hashchange', () => {
+  const hash = window.location.hash.replace('#', '');
+  if (hash) {
+    showSection(hash);
+  }
+});
+
 </script>
 
 </body>
