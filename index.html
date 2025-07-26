@@ -86,6 +86,7 @@
   <p>Скидка (%): <input type="number" id="discount" min="0" max="100" value="0" oninput="updateTotal()"></p>
   <div class="result">💰 Итог: <span id="grandTotal">0</span> ₽</div>
   <div class="result">💰 Итог со скидкой: <span id="grandTotalWithDiscount">0</span> ₽</div>
+  <div class="result">📌 Стоимость за 1 единицу (со скидкой): <span id="perItem">0</span> ₽</div>
   <button onclick="resetCalc()">🔄 Очистить</button>
 </section>
 
@@ -117,6 +118,10 @@ function updateTotal() {
   let discounted = grandTotal * (1 - discount / 100);
   document.getElementById('grandTotalWithDiscount').innerText = discounted.toFixed(2);
 }
+  let perItemWithDiscount = totalQty > 0 ? (discounted / totalQty) : 0;
+  document.getElementById('perItem').innerText = perItemWithDiscount.toFixed(2);
+}
+</script>
 
 function resetCalc() {
   document.querySelectorAll('#serviceTable input').forEach(input => input.value = 0);
