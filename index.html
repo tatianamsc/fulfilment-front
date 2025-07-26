@@ -48,6 +48,17 @@
       <tr><td>Вложение предмета</td><td class="price">2.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
       <tr><td>Сборка короба</td><td class="price">2.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
       <tr><td>Упаковка</td><td class="price">2.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
+      <!-- Новые услуги -->
+      <tr><td>Зип-пакет матовый (15×21)</td><td class="price">7.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
+      <tr><td>Зип-пакет матовый (17×25)</td><td class="price">8.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
+      <tr><td>Зип-пакет матовый (20×30)</td><td class="price">10.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
+      <tr><td>Маркировка на товар</td><td class="price">5.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
+      <tr><td>Маркировка на упаковку</td><td class="price">5.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
+      <tr><td>Честный знак на товар</td><td class="price">5.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
+      <tr><td>Короб (60×40×40)</td><td class="price">120.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
+      <tr><td>Доставка WILDBERRIES (КОЛЕДИНО, ПОДОЛЬСК)</td><td class="price">400.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
+      <tr><td>Доставка WILDBERRIES (ЭЛЕКТРОСТАЛЬ)</td><td class="price">450.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
+      <tr><td>Доставка OZON (КАЗАНЬ)</td><td class="price">800.00</td><td><input type="number" min="0" value="0" oninput="updateTotal()"></td><td class="lineTotal">0</td><td class="perUnit">0</td></tr>
     </tbody>
   </table>
 
@@ -73,7 +84,6 @@ function updateTotal() {
   let rows = document.querySelectorAll('#serviceTable tr');
   let grandTotal = 0;
   let totalQty = 0;
-
   rows.forEach(row => {
     let price = parseFloat(row.querySelector('.price').innerText);
     let qty = parseInt(row.querySelector('input').value) || 0;
@@ -84,13 +94,10 @@ function updateTotal() {
     grandTotal += lineTotal;
     totalQty += qty;
   });
-
   document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
-
   let discount = parseFloat(document.getElementById('discount').value) || 0;
   let discounted = grandTotal * (1 - discount / 100);
   document.getElementById('grandTotalWithDiscount').innerText = discounted.toFixed(2);
-
   let perItemWithDiscount = totalQty > 0 ? (discounted / totalQty) : 0;
   document.getElementById('perItem').innerText = perItemWithDiscount.toFixed(2);
 }
