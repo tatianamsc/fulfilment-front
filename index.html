@@ -29,7 +29,7 @@
   <button onclick="showSection('contacts')">☎️ Контакты</button>
 </nav>
 
-<section id="calc" class="active">
+<section id="calc">
   <h2>📦 Рассчитать стоимость</h2>
   <table>
     <thead>
@@ -85,9 +85,4 @@
 
   <p>Скидка (%): <input type="number" id="discount" min="0" max="100" value="0" oninput="updateTotal()"></p>
   <div class="result">💰 Итог: <span id="grandTotal">0</span> ₽</div>
-  <div class="result">💰 Итог со скидкой: <span id="grandTotalWithDiscount">0</span> ₽</div>
-  <button onclick="resetCalc()">🔄 Очистить</button>
-</section>
-
-<section id="address">
-  <h2
+  <div class="result">💰 Итог со скидкой: <span id="grandTotalWithDiscount">0</span>
