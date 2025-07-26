@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FFMSC Мини-приложение</title>
+<title>FFMSC Мини‑приложение</title>
 <style>
   body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f9f9f9; color:#333; text-align:center; }
   header { background:#6c63ff; color:#fff; padding:1rem; font-size:1.5rem; }
@@ -21,7 +21,7 @@
 </head>
 <body>
 
-<header>FFMSC Мини-приложение</header>
+<header>FFMSC Мини‑приложение</header>
 
 <nav>
   <button onclick="showSection('calc')">📦 Рассчитать</button>
@@ -104,26 +104,29 @@
 function updateTotal() {
   let rows = document.querySelectorAll('#serviceTable tr');
   let grandTotal = 0;
-  let totalQty = 0;
+  let priemkaQty = 0;
 
   rows.forEach(row => {
-    let price = parseFloat(row.querySelector('.price').innerText);
-    let qty = parseInt(row.querySelector('input').value) || 0;
-    let lineTotal = price * qty;
+    const name = row.querySelector('td').innerText.trim();
+    const price = parseFloat(row.querySelector('.price').innerText);
+    const qty = parseInt(row.querySelector('input').value) || 0;
+    const lineTotal = price * qty;
     row.querySelector('.lineTotal').innerText = lineTotal.toFixed(2);
-    let perUnit = qty > 0 ? (lineTotal / qty) : 0;
-    row.querySelector('.perUnit').innerText = perUnit.toFixed(2);
+    row.querySelector('.perUnit').innerText = qty > 0 ? (lineTotal / qty).toFixed(2) : '0';
     grandTotal += lineTotal;
-    totalQty += qty;
+
+    if (name === 'Приёмка товара') {
+      priemkaQty = qty;
+    }
   });
 
   document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
-  let discount = parseFloat(document.getElementById('discount').value) || 0;
-  let discounted = grandTotal * (1 - discount / 100);
+  const discount = parseFloat(document.getElementById('discount').value) || 0;
+  const discounted = grandTotal * (1 - discount / 100);
   document.getElementById('grandTotalWithDiscount').innerText = discounted.toFixed(2);
 
-  let perItemWithDiscount = totalQty > 0 ? (discounted / totalQty) : 0;
-  document.getElementById('perItem').innerText = perItemWithDiscount.toFixed(2);
+  const perItem = priemkaQty > 0 ? (discounted / priemkaQty) : 0;
+  document.getElementById('perItem').innerText = perItem.toFixed(2);
 }
 
 function resetCalc() {
@@ -136,12 +139,13 @@ function showSection(id) {
   document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.location.hash = id;
-  if (id === 'calc') { updateTotal(); }
+  if (id === 'calc') updateTotal();
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const sectionId = window.location.hash.replace('#','') || 'calc';
-  showSection(sectionId);
+  const params = new URLSearchParams(window.location.search);
+  const section = params.get('section') || 'calc';
+  showSection(section);
 });
 </script>
 
